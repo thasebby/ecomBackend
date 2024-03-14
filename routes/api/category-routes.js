@@ -44,15 +44,44 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   // update a category by its `id` value
-  // try{
-  //   const updateId = await Category.update(req.body,{
-  //     where:{id:req.params.id}
-  //   });
-  // }
+  try{
+    const updateId = await Category.update(req.body,{
+      where:{id:req.params.id}
+    });
+
+    if (updateId[0] === 0) {
+      res.status(404).json({message: 'ID not found'});
+    }
+    else{
+      res.status(200).json({message: 'ID Updated'});
+
+    }
+  }
+  catch(err){
+    res.status(500).json(err);
+  }
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
   // delete a category by its `id` value
+  try{
+    const deleteId = await Category.destroy({
+      where:{id:req.params.id}
+    });
+
+    // can't be (deleteId[0] === 0) like I did above with the put statement because the destroy method returns the number of rows deleted directly
+    //The update method returns an array indicating the number of rows affected
+    if (deleteId === 0) {
+      res.status(404).json({message:'ID not found'});
+      console.log(deleteId);
+    }
+    else{
+      res.status(200).json({message: 'ID deleted'});
+    }
+  }
+  catch(err){
+    res.status(500).json(err);
+  }
 });
 
 module.exports = router;
