@@ -73,7 +73,7 @@ router.delete('/:id', async (req, res) => {
     //The update method returns an array indicating the number of rows affected
     if (deleteId === 0) {
       res.status(404).json({message:'ID not found'});
-      console.log(deleteId);
+      
     }
     else{
       res.status(200).json({message: 'ID deleted'});
